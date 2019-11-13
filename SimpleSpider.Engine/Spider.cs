@@ -3,14 +3,20 @@
     using System;
     using System.Collections.Generic;
     using System.Collections.Concurrent;
+    using System.Threading;
 
     using HtmlAgilityPack;
 
     using Configuration;
     using Infrastructure;
+    using Models;
 
     public class Spider
     {
+        private const int startTimeInterval = 150;
+        private const int endTimeInterval = 3000;
+        private readonly Random random = new Random();
+
         private volatile int countOfUrlsToCrawled;
         private string rootUrl;
         private ConcurrentDictionary<string,string> crawledLinks { get; set; }
@@ -28,7 +34,7 @@
         {
         }
 
-        public Action<KeyValuePair<string, List<string>>> OnPageComplete { get; set; }
+        public Action<KeyValuePair<string, List<Link>>> OnPageComplete { get; set; }
 
         public Action OnCrawlCompleteSuccessfully { get; set; }
 
@@ -53,7 +59,7 @@
 
         private void Crawl(object state)
         {
-            List<string> urls = new List<string>();
+            List<Link> urls = new List<Link>();
             var url = (string)state;
             this.countOfUrlsToCrawled++;
 
@@ -70,7 +76,8 @@
                 Uri uri;
                 if (hrefValue.StartsWith("/") && Uri.TryCreate(url + hrefValue, UriKind.Absolute, out uri) && this.crawledLinks.TryAdd(uri.AbsoluteUri, uri.AbsoluteUri))
                 {
-                    urls.Add(uri.AbsoluteUri);
+                    urls.Add(new Link() { Url = uri.AbsoluteUri, Title = linkNode.InnerText });
+                    Wait();
                     this.TaskManager.RunTask(Crawl, uri.AbsoluteUri);
 
                     continue;
@@ -78,19 +85,25 @@
 
                 if(hrefValue.Contains(rootUrl) && this.crawledLinks.TryAdd(hrefValue, hrefValue))
                 {
+                    Wait();
                     this.TaskManager.RunTask(Crawl, hrefValue);
                 }
 
-                urls.Add(hrefValue);
+                urls.Add(new Link() { Url = hrefValue, Title = linkNode.InnerText });
             }
 
-            this.OnPageComplete?.Invoke(new KeyValuePair<string, List<string>>(url, urls));
+            this.OnPageComplete?.Invoke(new KeyValuePair<string, List<Link>>(url, urls));
             this.countOfUrlsToCrawled--;
 
             if(this.countOfUrlsToCrawled == 0)
             {
                 this.OnCrawlCompleteSuccessfully?.Invoke();
             }
+        }
+
+        private void Wait()
+        {
+            Thread.Sleep(random.Next(startTimeInterval, endTimeInterval));
         }
     }
 }
