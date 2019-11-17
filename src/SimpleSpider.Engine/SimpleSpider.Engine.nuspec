@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>SimpleSpider</id>
+    <version>1.0.0</version>
+    <title>Simple Spider</title>
+    <authors>Iliya Nedelchev</authors>
+    <owners>Iliya Nedelchev</owners>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>Description:Simple Spider is library for crawling some domain.</description>
+	  <license type="file">LICENSE</license>
+    <projectUrl>https://github.com/iovigi/SimpleSpider</projectUrl>
+    <copyright>Copyright ©  2019</copyright>
+    <dependencies />
+  </metadata>
+</package>
