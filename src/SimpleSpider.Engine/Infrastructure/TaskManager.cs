@@ -12,6 +12,7 @@
 
         public TaskManager(int maxConcurrency)
         {
+            this.cancellationTokenSource = new CancellationTokenSource();
             this.MaxConcurrency = maxConcurrency;
             this.factory = new TaskFactory(new LimitedConcurrencyLevelTaskScheduler(this.MaxConcurrency));
         }

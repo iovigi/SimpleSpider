@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.489
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleSpider.Engine", ".\SimpleSpider.Engine\SimpleSpider.Engine.csproj", "{974A74A7-9D57-40D6-AC40-7CFBD379476E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleSpider.Engine", "SimpleSpider.Engine\SimpleSpider.Engine.csproj", "{974A74A7-9D57-40D6-AC40-7CFBD379476E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleSpider.Console", "SimpleSpider.Console\SimpleSpider.Console.csproj", "{4186FC6F-C9FD-49B4-9E3C-48CFEF29503D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{974A74A7-9D57-40D6-AC40-7CFBD379476E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{974A74A7-9D57-40D6-AC40-7CFBD379476E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{974A74A7-9D57-40D6-AC40-7CFBD379476E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4186FC6F-C9FD-49B4-9E3C-48CFEF29503D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4186FC6F-C9FD-49B4-9E3C-48CFEF29503D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4186FC6F-C9FD-49B4-9E3C-48CFEF29503D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4186FC6F-C9FD-49B4-9E3C-48CFEF29503D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

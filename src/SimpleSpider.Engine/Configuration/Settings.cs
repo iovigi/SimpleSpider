@@ -6,7 +6,7 @@
         {
             this.MaxConcurrency = maxConcurrency;
             this.MinTimeIntervalDelay = minTimeIntervalDeplay;
-            this.MaxTimeIntervalDelay = MaxTimeIntervalDelay;
+            this.MaxTimeIntervalDelay = maxTimeIntervalDelay;
             this.MaxFailTimesForUrl = maxFailTimesForUrl;
         }
 

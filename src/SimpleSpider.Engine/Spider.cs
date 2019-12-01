@@ -86,21 +86,39 @@
                     Uri uri;
                     if (hrefValue.StartsWith("/") && Uri.TryCreate(url + hrefValue, UriKind.Absolute, out uri) && this.crawledLinks.TryAdd(uri.AbsoluteUri, uri.AbsoluteUri))
                     {
-                        this.OnNewLink?.Invoke(this.GetLink(uri.AbsoluteUri, url, linkNode.InnerText));
+                        try
+                        {
+                            this.OnNewLink?.Invoke(this.GetLink(uri.AbsoluteUri, url, linkNode.InnerText));
+                        }
+                        catch
+                        {
+                        }
 
                         Wait();
-                        this.TaskManager.RunTask(Crawl, new KeyValuePair<string, int>(uri.AbsoluteUri, 0));
+
+                        if (this.crawledLinks.TryAdd(uri.AbsoluteUri, uri.AbsoluteUri))
+                        {
+                            this.TaskManager.RunTask(Crawl, new KeyValuePair<string, int>(uri.AbsoluteUri, 0));
+                        }
 
                         continue;
                     }
 
-                    if (hrefValue.Contains(rootUrl) && this.crawledLinks.TryAdd(hrefValue, hrefValue))
+                    if (hrefValue.Contains(rootUrl.Replace("http://", "").Replace("https://", "")) && this.crawledLinks.TryAdd(hrefValue, hrefValue))
                     {
                         this.Wait();
-                        this.TaskManager.RunTask(Crawl, new KeyValuePair<string, int>(hrefValue, 0));
+
+                        if (this.crawledLinks.TryAdd(hrefValue, hrefValue))
+                        {
+                            this.TaskManager.RunTask(Crawl, new KeyValuePair<string, int>(hrefValue, 0));
+                        }
                     }
 
-                    this.OnNewLink?.Invoke(this.GetLink(hrefValue, url, linkNode.InnerText));
+                    try
+                    {
+                        this.OnNewLink?.Invoke(this.GetLink(hrefValue, url, linkNode.InnerText));
+                    }
+                    catch { }
                 }
 
                 this.countOfUrlsToCrawled--;
@@ -117,7 +135,7 @@
                 this.Wait();
                 int failTime = kv.Value + 1;
 
-                if(failTime > settings.MaxFailTimesForUrl)
+                if (failTime > settings.MaxFailTimesForUrl)
                 {
                     return;
                 }
@@ -133,8 +151,11 @@
 
         private Link GetLink(string toLink, string fromLink, string title)
         {
-            var toInfo = this.domainParser.Get(toLink);
-            var fromInfo = this.domainParser.Get(fromLink);
+            var escapedToLink = toLink.Replace("http://", "").Replace("https://", "");
+            var escapedFromLink = fromLink.Replace("http://", "").Replace("https://", "");
+
+            var toInfo = this.domainParser.Get(escapedToLink);
+            var fromInfo = this.domainParser.Get(escapedFromLink);
 
             return new Link()
             {
